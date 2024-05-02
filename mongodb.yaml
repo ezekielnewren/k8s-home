@@ -1,0 +1,83 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  namespace: mongodb
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: "app"
+                operator: "In"
+                values:
+                - "mongodb"
+            topologyKey: "kubernetes.io/hostname"
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      initContainers:
+      - name: create-mongo-dirs
+        image: busybox
+        command: ["sh", "-c", "mkdir -p /data/configdb /data/db /data/log; chown -R 999:999 /data"]
+        volumeMounts:
+        - name: mongodb-volume
+          mountPath: /data
+      containers:
+      - name: mongodb
+        image: mongo:7.0
+        #command: ["/bin/bash", "-c", "sleep infinity"]
+        args:
+        - "--config"
+        - "/data/mongod.conf"
+        - "--verbose"
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongodb-volume
+          mountPath: "/data"
+        - name: mongodb-secret
+          mountPath: "/secret"
+        - name: rootca-config
+          mountPath: "/data/rootca.pem"
+          subPath: "rootca.pem"
+          readOnly: true
+        - name: mongod-config
+          mountPath: "/data/mongod.conf"
+          subPath: "mongod.conf"
+        env:
+        - name: MONGO_INITDB_ROOT_USERNAME
+          value: "root"
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-initdb-root-password
+              key: password
+      volumes:
+        - name: mongodb-volume
+          hostPath:
+            path: /data/k8s/mongodb/mongodb-deployment
+            type: DirectoryOrCreate
+        - name: mongodb-secret
+          secret:
+            secretName: mongodb.pem
+        - name: rootca-config
+          configMap:
+            name: rootca.pem
+        - name: mongod-config
+          configMap:
+            name: mongod.conf
+
