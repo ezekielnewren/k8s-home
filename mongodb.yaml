@@ -34,7 +34,7 @@ spec:
         image: busybox
         command: ["sh", "-c", "mkdir -p /data/configdb /data/db /data/log; chown -R 999:999 /data"]
         volumeMounts:
-        - name: mongodb-volume
+        - name: mongodb-data
           mountPath: /data
       containers:
       - name: mongodb
@@ -43,14 +43,11 @@ spec:
         args:
         - "--config"
         - "/data/mongod.conf"
-        - "--verbose"
         ports:
         - containerPort: 27017
         volumeMounts:
-        - name: mongodb-volume
+        - name: mongodb-data
           mountPath: "/data"
-        - name: mongodb-secret
-          mountPath: "/secret"
         - name: rootca-config
           mountPath: "/data/rootca.pem"
           subPath: "rootca.pem"
@@ -58,6 +55,8 @@ spec:
         - name: mongod-config
           mountPath: "/data/mongod.conf"
           subPath: "mongod.conf"
+        - name: mongodb-secret
+          mountPath: "/secret"
         env:
         - name: MONGO_INITDB_ROOT_USERNAME
           value: "root"
@@ -67,17 +66,17 @@ spec:
               name: mongo-initdb-root-password
               key: password
       volumes:
-        - name: mongodb-volume
+        - name: mongodb-data
           hostPath:
             path: /data/k8s/mongodb/mongodb-deployment
             type: DirectoryOrCreate
-        - name: mongodb-secret
-          secret:
-            secretName: mongodb.pem
         - name: rootca-config
           configMap:
             name: rootca.pem
         - name: mongod-config
           configMap:
             name: mongod.conf
+        - name: mongodb-secret
+          secret:
+            secretName: mongodb.pem
 
