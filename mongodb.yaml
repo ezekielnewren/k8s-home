@@ -29,6 +29,16 @@ spec:
             topologyKey: "kubernetes.io/hostname"
       hostNetwork: true
       dnsPolicy: ClusterFirstWithHostNet
+      hostAliases:
+      - ip: 192.168.17.1
+        hostnames:
+        - "mdb1.ezekielnewren.com"
+      - ip: 192.168.17.2
+        hostnames:
+        - "mdb2.ezekielnewren.com"
+      - ip: 192.168.17.3
+        hostnames:
+        - "mdb3.ezekielnewren.com"
       initContainers:
       - name: create-mongo-dirs
         image: busybox
