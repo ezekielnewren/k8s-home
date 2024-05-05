@@ -1,0 +1,28 @@
+apiVersion: ceph.rook.io/v1
+kind: CephCluster
+metadata:
+  name: production
+  namespace: rook-ceph
+spec:
+  cephVersion:
+    image: quay.io/ceph/ceph:v18.2.2
+  dataDirHostPath: /data/k8s/rook-ceph/production
+  mon:
+    count: 3
+    allowMultiplePerNode: false
+  dashboard:
+    enabled: true
+  storage:
+    useAllNodes: false
+    useAllDevices: false
+    nodes:
+      - name: "pm1"
+        devices:
+          - name: "/dev/mapper/Samsung_SSD_870_QVO_8TB_S5VUNJ0TA00068Z"
+      - name: "pm2"
+        devices:
+          - name: "/dev/mapper/Samsung_SSD_870_QVO_8TB_S5VUNJ0TA00775E"
+      - name: "pm3"
+        devices:
+          - name: "/dev/mapper/Samsung_SSD_870_QVO_8TB_S5VUNJ0T803861W"
+
