@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-NODE-CLASS.DESIGNATION
+spec:
+  capacity:
+    storage: SIZE
+  volumeMode: Block
+  accessModes:
+    - ReadWriteOnce
+  persistentVolumeReclaimPolicy: Retain
+  storageClassName: CLASS
+  local:
+    path: /dev/mapper/MNSN
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - pm1
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: pvc-NODE-CLASS.DESIGNATION
+  namespace: NAMESPACE
+spec:
+  storageClassName: CLASS
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: SIZE
+  volumeMode: Block
+
