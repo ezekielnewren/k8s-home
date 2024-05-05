@@ -527,13 +527,13 @@ data:
   CSI_NFS_ATTACH_REQUIRED: "true"
   # Rook Discover toleration. Will tolerate all taints with all keys.
   # (Optional) Rook Discover tolerations list. Put here list of taints you want to tolerate in YAML format.
-  # DISCOVER_TOLERATIONS: |
-  #   - effect: NoSchedule
-  #     key: node-role.kubernetes.io/control-plane
-  #     operator: Exists
-  #   - effect: NoExecute
-  #     key: node-role.kubernetes.io/etcd
-  #     operator: Exists
+  DISCOVER_TOLERATIONS: |
+    - effect: NoSchedule
+      key: node-role.kubernetes.io/control-plane
+      operator: Exists
+    - effect: NoExecute
+      key: node-role.kubernetes.io/etcd
+      operator: Exists
   # (Optional) Rook Discover priority class name to set on the pod(s)
   # DISCOVER_PRIORITY_CLASS_NAME: "<PriorityClassName>"
   # (Optional) Discover Agent NodeAffinity.
