@@ -9,8 +9,12 @@ host="pm1 pm2 pm3"
 
 data=$(echo "$host" | tr ' ' '\n' | xargs -I {} vault kv get kv/machine/{} | jq .data.data | jq -sMc .)
 
-template=pv-template.yaml
+template=$(dirname $0)/pv-template.yaml
 
+if [ ! -f $template ]; then
+    echo "$template: No such file or directory"
+    exit 1
+fi
 
 create_manifest() {
   NODE=$1
