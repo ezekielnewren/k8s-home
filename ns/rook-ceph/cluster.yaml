@@ -12,6 +12,26 @@ spec:
     allowMultiplePerNode: false
   dashboard:
     enabled: true
+  network:
+    requireMsgr2: true
+  storage:
+    useAllNodes: false
+    useAllDevices: false
+    config:
+      encryptedDevice: "true"
+    nodes:
+      - name: "pm1"
+        devices:
+          - name: Samsung_SSD_870_QVO_8TB_S5VUNJ0TA00068Z
+            fullpath: "/dev/disk/by-id/ata-Samsung_SSD_870_QVO_8TB_S5VUNJ0TA00068Z"
+      - name: "pm2"
+        devices:
+          - name: Samsung_SSD_870_QVO_8TB_S5VUNJ0TA00775E
+            fullpath: "/dev/disk/by-id/ata-Samsung_SSD_870_QVO_8TB_S5VUNJ0TA00775E"
+      - name: "pm3"
+        devices:
+          - name: Samsung_SSD_870_QVO_8TB_S5VUNJ0T803861W
+            fullpath: "/dev/disk/by-id/ata-Samsung_SSD_870_QVO_8TB_S5VUNJ0T803861W"
   placement:
     all:
       tolerations:
@@ -21,17 +41,3 @@ spec:
         - effect: NoExecute
           key: node-role.kubernetes.io/etcd
           operator: Exists
-  storage:
-    useAllNodes: false
-    useAllDevices: false
-    nodes:
-      - name: "pm1"
-        devices:
-          - name: "/dev/mapper/Samsung_SSD_870_QVO_8TB_S5VUNJ0TA00068Z"
-      - name: "pm2"
-        devices:
-          - name: "/dev/mapper/Samsung_SSD_870_QVO_8TB_S5VUNJ0TA00775E"
-      - name: "pm3"
-        devices:
-          - name: "/dev/mapper/Samsung_SSD_870_QVO_8TB_S5VUNJ0T803861W"
-
