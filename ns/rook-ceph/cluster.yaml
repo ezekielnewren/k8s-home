@@ -12,6 +12,15 @@ spec:
     allowMultiplePerNode: false
   dashboard:
     enabled: true
+  placement:
+    all:
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+          operator: Exists
+        - effect: NoExecute
+          key: node-role.kubernetes.io/etcd
+          operator: Exists
   storage:
     useAllNodes: false
     useAllDevices: false
