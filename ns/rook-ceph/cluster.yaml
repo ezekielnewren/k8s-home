@@ -13,7 +13,11 @@ spec:
   dashboard:
     enabled: true
   network:
+    provider: host
     requireMsgr2: true
+    selectors:
+      public: "192.168.16.0/24"
+      cluster: "192.168.17.0/24"
   storage:
     useAllNodes: false
     useAllDevices: false
