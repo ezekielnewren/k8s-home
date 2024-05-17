@@ -56,12 +56,11 @@ spec:
         ports:
         - containerPort: 27017
         volumeMounts:
+        - name: kube-root-ca
+          mountPath: "/etc/ssl/certs"
+          readOnly: true
         - name: mongodb-data
           mountPath: "/data"
-        - name: rootca-config
-          mountPath: "/data/rootca.pem"
-          subPath: "rootca.pem"
-          readOnly: true
         - name: mongod-config
           mountPath: "/data/mongod.conf"
           subPath: "mongod.conf"
@@ -76,13 +75,13 @@ spec:
               name: mongo-initdb-root-password
               key: password
       volumes:
+        - name: kube-root-ca
+          configMap:
+            name: kube-root-ca.crt
         - name: mongodb-data
           hostPath:
             path: /data/k8s/mongodb/mongodb-deployment
             type: DirectoryOrCreate
-        - name: rootca-config
-          configMap:
-            name: rootca.pem
         - name: mongod-config
           configMap:
             name: mongod.conf
