@@ -5,14 +5,17 @@ metadata:
   namespace: rook-ceph
 spec:
   metadataPool:
-    failureDomain: host
     replicated:
       size: 3
   dataPools:
-    - name: replicated
-      failureDomain: host
-      replicated:
+    - replicated:
         size: 3
+      parameters:
+        pg_num: "128"
+        pgp_num: "128"
+      crushRoot: default
+      failureDomain: host
+      deviceClass: ssd
   preserveFilesystemOnDelete: true
   metadataServer:
     activeCount: 1
