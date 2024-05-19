@@ -23,6 +23,17 @@ spec:
           - /bin/bash
           - -c
           - sleep infinity
+        env:
+        - name: ETCDCTL_API
+          value: "3"
+        - name: ETCDCTL_CACERT
+          value: /etc/kubernetes/pki/etcd/ca.crt
+        - name: ETCDCTL_CERT
+          value: /etc/kubernetes/pki/etcd/server.crt
+        - name: ETCDCTL_KEY
+          value: /etc/kubernetes/pki/etcd/server.key
+        - name: ETCDCTL_ENDPOINTS
+          value: https://pm1.ezekielnewren.com:2379,https://pm2.ezekielnewren.com:2379,https://pm3.ezekielnewren.com:2379
         volumeMounts:
         - mountPath: /var/lib/etcd
           name: etcd-data
