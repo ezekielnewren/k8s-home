@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etcd-toolbox
+  namespace: kube-system
+  labels:
+    app: etcd-toolbox
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etcd-toolbox
+  template:
+    metadata:
+      labels:
+        app: etcd-toolbox
+    spec:
+      containers:
+      - name: etcd-toolbox
+        image: bitnami/etcd:3.5.13
+        command: 
+          - /bin/bash
+          - -c
+          - sleep infinity
+        volumeMounts:
+        - mountPath: /var/lib/etcd
+          name: etcd-data
+        - mountPath: /etc/kubernetes/pki/etcd
+          name: etcd-certs
+      volumes:
+      - hostPath:
+          path: /etc/kubernetes/pki/etcd
+          type: Directory
+        name: etcd-certs
+      - hostPath:
+          path: /var/lib/etcd
+          type: Directory
+        name: etcd-data
+      tolerations:
+        - effect: NoSchedule
+          key: node-role.kubernetes.io/control-plane
+          operator: Exists
+        - effect: NoExecute
+          key: node-role.kubernetes.io/etcd
+          operator: Exists
+
