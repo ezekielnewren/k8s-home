@@ -14,7 +14,8 @@ spec:
     failureDomain: host
     deviceClass: ssd
   dataPools:
-    - replicated:
+    - name: replicated
+      replicated:
         size: 3
       parameters:
         pg_num: "128"
