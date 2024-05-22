@@ -7,6 +7,12 @@ spec:
   metadataPool:
     replicated:
       size: 3
+    parameters:
+      pg_num: "128"
+      pgp_num: "128"
+    crushRoot: default
+    failureDomain: host
+    deviceClass: ssd
   dataPools:
     - replicated:
         size: 3
