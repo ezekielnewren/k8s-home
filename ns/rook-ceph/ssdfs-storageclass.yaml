@@ -10,6 +10,7 @@ parameters:
   clusterID: rook-ceph
   fsName: ssdfs
   pool: ssdfs-replicated
+  rootPath: /csi
 
   csi.storage.k8s.io/provisioner-secret-name: rook-csi-cephfs-provisioner
   csi.storage.k8s.io/provisioner-secret-namespace: rook-ceph
