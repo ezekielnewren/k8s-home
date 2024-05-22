@@ -36,7 +36,7 @@ spec:
         image: rockylinux:9.3
         command: ["/bin/bash", "-c", "sleep infinity"]
         volumeMounts:
-        - mountPath: "/data"
+        - mountPath: "/home"
           name: rockylinux-storage
       volumes:
       - name: rockylinux-storage
