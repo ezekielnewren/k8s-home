@@ -1,0 +1,49 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: certbot-cronjob
+  namespace: ingress
+spec:
+  schedule: "0 5 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          tolerations:
+            - key: "node-role.kubernetes.io/control-plane"
+              operator: "Exists"
+              effect: "NoSchedule"
+          containers:
+          - name: certbot
+            image: certbot/dns-route53
+            args:
+            - certonly
+            - --keep
+            - --dns-route53
+            - -d
+            - "ezekielnewren.com"
+            - -d
+            - "*.ezekielnewren.com"
+            - --agree-tos
+            - --email
+            - ezekielnewren@gmail.com
+            env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-route53
+                  key: AWS_ACCESS_KEY_ID
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-route53
+                  key: AWS_SECRET_ACCESS_KEY
+            volumeMounts:
+            - name: certbot-config
+              mountPath: /etc/letsencrypt
+          restartPolicy: Never
+          volumes:
+          - name: certbot-config
+            persistentVolumeClaim:
+              claimName: certbot-pvc
+
