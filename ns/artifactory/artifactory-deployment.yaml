@@ -39,5 +39,37 @@ spec:
       - name: artifactory-data
         persistentVolumeClaim:
           claimName: artifactory-pvc
-
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: artifactory
+  namespace: artifactory
+spec:
+  selector:
+    app: artifactory
+  ports:
+  - protocol: TCP
+    port: 8081
+    targetPort: 8081
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: artifactory-ingress
+  namespace: artifactory
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: artifactory.ezekielnewren.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: artifactory
+            port:
+              number: 8081
 
