@@ -8,8 +8,8 @@ spec:
     replicated:
       size: 3
     parameters:
-      pg_num: "128"
-      pgp_num: "128"
+      pg_num: "64"
+      pgp_num: "64"
     crushRoot: default
     failureDomain: host
     deviceClass: ssd
@@ -18,8 +18,8 @@ spec:
       replicated:
         size: 3
       parameters:
-        pg_num: "128"
-        pgp_num: "128"
+        pg_num: "64"
+        pgp_num: "64"
       crushRoot: default
       failureDomain: host
       deviceClass: ssd
