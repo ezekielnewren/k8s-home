@@ -1,3 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: artifactory-config
+  namespace: artifactory
+data:
+  artifactory.config.xml: |
+    <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+    <config>
+        <revision>1</revision>
+        <serverName>artifactory.ezekielnewren.com</serverName>
+        <urlBase>https://artifactory.ezekielnewren.com/artifactory</urlBase>
+        <security>
+            <!-- Security settings can be added here -->
+        </security>
+    </config>
+
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -35,10 +53,15 @@ spec:
           volumeMounts:
           - name: artifactory-data
             mountPath: /var/opt/jfrog/artifactory
+          - name: config-volume
+            mountPath: /opt/jfrog/artifactory/etc
       volumes:
       - name: artifactory-data
         persistentVolumeClaim:
           claimName: artifactory-pvc
+      - name: config-volume
+        configMap:
+          name: artifactory-config
 ---
 apiVersion: v1
 kind: Service
