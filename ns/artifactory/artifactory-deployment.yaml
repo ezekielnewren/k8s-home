@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: artifactory
+  namespace: artifactory
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: artifactory
+  template:
+    metadata:
+      labels:
+        app: artifactory
+    spec:
+      tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      initContainers:
+        - name: init-artifactory
+          image: busybox
+          command:
+            - sh
+            - -c
+            - chown -R 1030:1030 /opt/jfrog/artifactory
+          volumeMounts:
+          - name: artifactory-data
+            mountPath: /opt/jfrog/artifactory
+      containers:
+        - name: artifactory
+          image: docker.bintray.io/jfrog/artifactory-oss:latest
+          ports:
+          - containerPort: 8081
+          volumeMounts:
+          - name: artifactory-data
+            mountPath: /var/opt/jfrog/artifactory
+      volumes:
+      - name: artifactory-data
+        persistentVolumeClaim:
+          claimName: artifactory-pvc
+
+
