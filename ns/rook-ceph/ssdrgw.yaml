@@ -1,0 +1,56 @@
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStore
+metadata:
+  name: ssdrgw
+  namespace: rook-ceph
+spec:
+  metadataPool:
+    replicated:
+      size: 3
+    #parameters:
+    #  pg_num: "32"
+    #  pgp_num: "32"
+    crushRoot: default
+    failureDomain: host
+    deviceClass: ssd
+  dataPool:
+    replicated:
+      size: 3
+    #parameters:
+    #  pg_num: "32"
+    #  pgp_num: "32"
+    crushRoot: default
+    failureDomain: host
+    deviceClass: ssd
+  preservePoolsOnDelete: false
+  gateway:
+    # type: s3
+    port: 4444
+    instances: 1
+    placement:
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      - effect: NoExecute
+        key: node-role.kubernetes.io/etcd
+        operator: Exists
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: rgw-ingress
+  namespace: rook-ceph
+spec:
+  rules:
+  - host: rgw.ezekielnewren.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rook-ceph-rgw-ssdrgw
+            port:
+              number: 4444
+
