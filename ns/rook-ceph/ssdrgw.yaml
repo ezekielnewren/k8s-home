@@ -42,8 +42,23 @@ metadata:
   name: rgw-ingress
   namespace: rook-ceph
 spec:
+  tls:
+  - secretName: "rgw.tls"
+    hosts:
+    - "rgw.ezekielnewren.com"
+    - "*.rgw.ezekielnewren.com"
   rules:
-  - host: rgw.ezekielnewren.com
+  - host: "rgw.ezekielnewren.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rook-ceph-rgw-ssdrgw
+            port:
+              number: 4444
+  - host: "*.rgw.ezekielnewren.com"
     http:
       paths:
       - path: /
