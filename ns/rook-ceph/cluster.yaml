@@ -32,10 +32,14 @@ spec:
         devices:
           - name: Samsung_SSD_870_QVO_8TB_S5VUNJ0TA00775E
             fullpath: "/dev/disk/by-id/ata-Samsung_SSD_870_QVO_8TB_S5VUNJ0TA00775E"
+          - name: ST20000NE000-3G5101_ZVT205PY
+            fullpath: "/dev/disk/by-id/ata-ST20000NE000-3G5101_ZVT205PY"
       - name: "pm3.ezekielnewren.com"
         devices:
           - name: Samsung_SSD_870_QVO_8TB_S5VUNJ0T803861W
             fullpath: "/dev/disk/by-id/ata-Samsung_SSD_870_QVO_8TB_S5VUNJ0T803861W"
+          - name: ST20000NT001-3LT101_ZVTCJ2RK
+            fullpath: "/dev/disk/by-id/ata-ST20000NT001-3LT101_ZVTCJ2RK"
   placement:
     all:
       tolerations:
