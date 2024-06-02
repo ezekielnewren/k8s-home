@@ -1,0 +1,95 @@
+apiVersion: ceph.rook.io/v1
+kind: CephBlockPool
+metadata:
+  name: s3rgw.rgw.glacier-ia.data
+  namespace: rook-ceph
+spec:
+  # name: s3rgw.rgw.glacier-ia.data
+  replicated:
+    size: 3
+  parameters:
+    pg_num: "8"
+    pgp_num: "8"
+  crushRoot: default
+  failureDomain: host
+  deviceClass: hdd
+---
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStore
+metadata:
+  # if the deletion hangs run this and remove all finalizers
+  # kubectl -n rook-ceph edit cephobjectstore/s3rgw
+  name: s3rgw
+  namespace: rook-ceph
+spec:
+  metadataPool:
+    replicated:
+      size: 3
+    parameters:
+      pg_num: "32"
+      pgp_num: "32"
+    crushRoot: default
+    failureDomain: host
+    deviceClass: ssd
+  dataPool:
+    replicated:
+      size: 3
+    parameters:
+      pg_num: "32"
+      pgp_num: "32"
+    crushRoot: default
+    failureDomain: host
+    deviceClass: ssd
+  preservePoolsOnDelete: false
+  gateway:
+    port: 4444
+    instances: 1
+    placement:
+      tolerations:
+      - effect: NoSchedule
+        key: node-role.kubernetes.io/control-plane
+        operator: Exists
+      - effect: NoExecute
+        key: node-role.kubernetes.io/etcd
+        operator: Exists
+# list the current zone config, make sure GLACIER_IA doesn't already exist
+# radosgw-admin zone get --rgw-zone=s3rgw
+# make sure the hdd pool exists
+# ceph osd pool ls | grep s3rgw.rgw.glacier-ia.data
+# add the GLACIER_IA storage class
+# radosgw-admin zonegroup placement add --rgw-zonegroup s3rgw --placement-id default-placement --storage-class GLACIER_IA
+# radosgw-admin zone placement add --rgw-zone s3rgw --placement-id default-placement --storage-class GLACIER_IA --data-pool s3rgw.rgw.glacier-ia.data
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: s3ingress
+  namespace: rook-ceph
+spec:
+  tls:
+  - secretName: "s3.tls"
+    hosts:
+    - "s3.ezekielnewren.com"
+    - "*.s3.ezekielnewren.com"
+  rules:
+  - host: "s3.ezekielnewren.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rook-ceph-rgw-s3rgw
+            port:
+              number: 4444
+  - host: "*.s3.ezekielnewren.com"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: rook-ceph-rgw-s3rgw
+            port:
+              number: 4444
+
