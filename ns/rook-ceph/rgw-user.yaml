@@ -1,0 +1,11 @@
+apiVersion: ceph.rook.io/v1
+kind: CephObjectStoreUser
+metadata:
+  name: admin
+  namespace: rook-ceph
+spec:
+  store: s3rgw
+  displayName: "Administrator"
+#  quotas:
+#    maxBuckets: 1000
+
