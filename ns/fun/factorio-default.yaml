@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: factorio-default
+  namespace: fun
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: factorio-default
+  template:
+    metadata:
+      labels:
+        app: factorio-default
+    spec:
+      initContainers:
+      - name: change-ownership
+        image: busybox:latest
+        command: ["sh", "-c", "chown 845:845 /factorio"]
+        volumeMounts:
+        - name: factorio-default-storage
+          mountPath: /factorio
+      containers:
+      - name: factorio-default
+        image: factoriotools/factorio:1.1.107
+        ports:
+        - containerPort: 34197
+          protocol: UDP
+        volumeMounts:
+        - name: factorio-default-storage
+          mountPath: /factorio
+      volumes:
+      - name: factorio-default-storage
+        persistentVolumeClaim:
+          claimName: factorio-default-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: factorio-default
+  namespace: fun
+spec:
+  type: NodePort
+  selector:
+    app: factorio-default
+  ports:
+  - protocol: UDP
+    port: 34197
+    targetPort: 34197
+    nodePort: 34197
+
