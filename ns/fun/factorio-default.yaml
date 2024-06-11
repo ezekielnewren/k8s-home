@@ -13,13 +13,7 @@ spec:
       labels:
         app: factorio-default
     spec:
-      initContainers:
-      - name: change-ownership
-        image: busybox:latest
-        command: ["sh", "-c", "chown 845:845 /factorio"]
-        volumeMounts:
-        - name: factorio-default-storage
-          mountPath: /factorio
+      dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: factorio-default
         image: factoriotools/factorio:1.1.107
