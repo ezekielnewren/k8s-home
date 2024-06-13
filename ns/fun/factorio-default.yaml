@@ -23,10 +23,19 @@ spec:
         volumeMounts:
         - name: factorio-default-storage
           mountPath: /factorio
+        #- name: whitelist
+        #  mountPath: /factorio/config/server-whitelist.json
+        #  subPath: server-whitelist.json
       volumes:
       - name: factorio-default-storage
         persistentVolumeClaim:
           claimName: factorio-default-pvc
+      - name: whitelist
+        configMap:
+          name: factorio-whitelist
+          items:
+          - key: server-whitelist.json
+            path: server-whitelist.json
 ---
 apiVersion: v1
 kind: Service
