@@ -7,4 +7,15 @@ spec:
   addresses:
   - 192.168.16.10-192.168.16.19
   autoAssign: true
+---
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: private-ad
+  namespace: metallb-system
+spec:
+  ipAddressPools:
+  - private
+  interfaces:
+  - br-mgmt
 

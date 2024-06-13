@@ -1,5 +1,6 @@
 ## https://metallb.universe.tf/installation/
 ## https://raw.githubusercontent.com/metallb/metallb/v0.14.5/config/manifests/metallb-native.yaml
+## kubectl label node <node-name> node-role.kubernetes.io/control-plane-
 apiVersion: v1
 kind: Namespace
 metadata:
