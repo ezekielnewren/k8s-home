@@ -1,0 +1,21 @@
+FROM rockylinux:9.3
+
+COPY copy/ceph.repo /etc/yum.repos.d/ceph.repo
+RUN dnf install -y epel-release
+# RUN dnf makecache
+# RUN dnf update -y
+RUN dnf install -y dumb-init ceph-common ceph-fuse samba tdb-tools
+
+## nice to have
+RUN dnf install -y procps-ng nano file which iputils iproute
+
+COPY copy/smb.conf /etc/samba/smb.conf
+COPY copy/ceph.conf /etc/ceph/ceph.conf
+
+RUN mkdir -p /mnt/media
+RUN mkdir -p /mnt/transfer
+
+COPY copy/entrypoint.sh /entrypoint.sh
+
+ENTRYPOINT /entrypoint.sh
+
