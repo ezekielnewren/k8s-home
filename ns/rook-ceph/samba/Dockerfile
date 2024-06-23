@@ -11,9 +11,10 @@ RUN dnf install -y procps-ng nano file which iputils iproute
 
 COPY copy/smb.conf /etc/samba/smb.conf
 COPY copy/ceph.conf /etc/ceph/ceph.conf
+COPY copy/fuse.conf /etc/fuse.conf
 
-RUN mkdir -p /mnt/media
-RUN mkdir -p /mnt/transfer
+RUN mkdir -p /mnt/media /mnt/transfer
+RUN chmod 700 /mnt/media /mnt/transfer
 
 COPY copy/entrypoint.sh /entrypoint.sh
 
