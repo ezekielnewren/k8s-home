@@ -16,16 +16,7 @@ if [ $(id -u) -eq 0 ]; then
     echo -e "[client.samba]\n    key = $SAMBA_PASSWORD" > /etc/ceph/keyring
 
     mkdir -p /var/log/samba /var/lib/samba /run/samba
-    chown -R samba:samba /var/log/samba /var/lib/samba /run /mnt/media /mnt/transfer /etc/ceph/keyring
+    chown -R samba:samba /var/log/samba /var/lib/samba /run /mnt/media /mnt/transfer /etc/ceph/keyring /etc/supervisord.conf
     chmod 600 /etc/ceph/keyring
-    
-    # bash
-else
-    # common="-f --name client.samba -m pm1:6789,pm2:6789,pm3:6789 --keyring /etc/ceph/keyring"
-    common="--name client.samba"
-    ceph-fuse $common --client_fs=hddfs --client-mountpoint=/media /mnt/media
-    ceph-fuse $common --client_fs=ssdfs --client-mountpoint=/transfer /mnt/transfer
-    :
-    smbd --foreground --debug-stdout --debuglevel 3 --no-process-group
 fi
 
