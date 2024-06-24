@@ -11,6 +11,7 @@ fi
 if [ $(id -u) -eq 0 ]; then
     groupadd -g $SAMBA_GID samba
     useradd -u $SAMBA_UID -g $SAMBA_GID -s /bin/bash samba
+    usermod -aG users samba
     echo -e "$SAMBA_PASSWORD\n$SAMBA_PASSWORD" | smbpasswd -a samba
     echo -e "[client.samba]\n    key = $SAMBA_PASSWORD" > /etc/ceph/keyring
 
