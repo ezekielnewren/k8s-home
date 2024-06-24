@@ -58,7 +58,7 @@ metadata:
   namespace: ingress
 spec:
   rules:
-  - host: registry.ezekielnewren.com
+  - host: docker.ezekielnewren.com
     http:
       paths:
       - path: /
