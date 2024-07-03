@@ -16,7 +16,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: factorio-default
-        image: factoriotools/factorio:1.1.107
+        image: factoriotools/factorio:1.1.109
         ports:
         - containerPort: 34197
           protocol: UDP
