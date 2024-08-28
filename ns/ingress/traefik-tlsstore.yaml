@@ -6,4 +6,6 @@ metadata:
 spec:
   defaultCertificate:
     secretName: ingress-tls
+  certificates:
+    - secretName: hybridocr-tls
 
