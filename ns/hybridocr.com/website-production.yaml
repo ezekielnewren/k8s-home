@@ -57,7 +57,4 @@ spec:
             name: hybridocr-website-service
             port:
               number: 80
-  tls:
-  - hosts:
-    - hybridocr.com
-    secretName: hybridocr-tls-secret
+
