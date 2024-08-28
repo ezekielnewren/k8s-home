@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: hybridocr
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hybridocr-website
+  namespace: hybridocr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hybridocr-website
+  template:
+    metadata:
+      labels:
+        app: hybridocr-website
+    spec:
+      containers:
+      - name: hybridocr-website
+        image: docker.ezekielnewren.com/hybridocr_website
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hybridocr-website-service
+  namespace: hybridocr
+spec:
+  selector:
+    app: hybridocr-website
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 5000
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: hybridocr-website-ingress
+  namespace: hybridocr
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls: "true"
+spec:
+  rules:
+  - host: hybridocr.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hybridocr-website-service
+            port:
+              number: 80
+  tls:
+  - hosts:
+    - hybridocr.com
+    secretName: hybridocr-tls-secret
