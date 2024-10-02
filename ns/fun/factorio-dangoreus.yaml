@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: factorio-dangoreus
-        image: factoriotools/factorio:1.1.109
+        image: factoriotools/factorio:1.1.110
         env:
         #- name: LOAD_LATEST_SAVE
         #  value: "dangoreus"
