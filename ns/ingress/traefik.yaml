@@ -6,6 +6,11 @@ tolerations:
   - key: "node-role.kubernetes.io/control-plane"
     operator: "Exists"
     effect: "NoSchedule"
+providers:
+  kubernetesCRD:
+    allowExternalNameServices: true
+  kubernetesIngress:
+    allowExternalNameServices: true
 ports:
   web:
     protocol: TCP
