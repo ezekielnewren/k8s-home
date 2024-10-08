@@ -25,6 +25,8 @@ ports:
     port: 8443
     containerPort: 8443
     nodePort: 443
+    forwardedHeaders:
+      insecure: true
 service:
   type: NodePort
 
