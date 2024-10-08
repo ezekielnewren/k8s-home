@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: to-laptop
+  namespace: ingress
+spec:
+  type: ExternalName
+  externalName: 192.168.16.8
+  ports:
+    - port: 8000
+---
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: development.hybridocr.com
+  namespace: ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host("development.hybridocr.com")
+    kind: Rule
+    services:
+    - name: to-laptop
+      port: 8000
+
