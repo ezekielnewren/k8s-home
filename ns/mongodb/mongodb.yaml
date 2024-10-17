@@ -39,6 +39,7 @@ spec:
       containers:
       - name: mongodb
         image: mongo:7.0
+        imagePullPolicy: Always
         #command: ["/bin/bash", "-c", "sleep infinity"]
         args:
         - "--config"
