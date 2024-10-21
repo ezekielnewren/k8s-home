@@ -15,11 +15,66 @@ spec:
       labels:
         app: redis
     spec:
+      initContainers:
+      - name: init-redis-config
+        image: python:3.11.7
+        command: ["bash", "-c", "pip install envtpl; envtpl -o /config/redis.conf --keep-template /tmp/redis.conf.j2"]
+        env:
+        - name: REDIS_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: redis-username
+              key: redis-username
+        - name: REDIS_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: redis-password
+              key: redis-password
+        volumeMounts:
+        - name: redis-config-volume
+          mountPath: /config
+        - name: redis-config-j2
+          mountPath: /tmp/redis.conf.j2
+          subPath: redis.conf.j2
       containers:
       - name: redis
         image: redis:latest
+        imagePullPolicy: Always
         ports:
         - containerPort: 6379
+        volumeMounts:
+        - name: redis-config-volume
+          mountPath: /config
+        args:
+        - "redis-server"
+        - "/config/redis.conf"
+      volumes:
+      - name: redis-config-volume
+        emptyDir: {}
+      - name: redis-config-j2
+        configMap:
+          name: redis-config-j2
+          items:
+          - key: redis.conf.j2
+            path: redis.conf.j2
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: redis-config-j2
+  namespace: redis
+data:
+  redis.conf.j2: |
+    bind 0.0.0.0
+    save ""
+    appendonly no
+    dbfilename ""
+
+    maxmemory {{ MAX_MEMORY | default("0") }}
+    maxmemory-policy {{ MAX_MEMORY_POLICY | default("noeviction") }}
+
+    user default off
+    user {{ REDIS_USERNAME }} on >{{ REDIS_PASSWORD }} ~* +@all
 ---
 apiVersion: v1
 kind: Service

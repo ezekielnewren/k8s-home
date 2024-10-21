@@ -1,0 +1,12 @@
+bind 0.0.0.0
+save ""
+appendonly no
+dbfilename ""
+
+maxmemory {{ MAX_MEMORY | default("0") }}
+maxmemory-policy {{ MAX_MEMORY_POLICY | default("noeviction") }}
+
+user default off
+user {{ REDIS_USERNAME }} on >{{ REDIS_PASSWORD }} ~* +@all
+
+
