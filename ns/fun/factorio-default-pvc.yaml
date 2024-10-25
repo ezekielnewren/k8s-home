@@ -5,8 +5,38 @@ metadata:
   namespace: fun
 spec:
   accessModes:
-  - ReadWriteOnce
+  - ReadWriteMany
   resources:
     requests:
-      storage: 1Gi
+      storage: 2Gi
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: factorio-default-pvc-init
+  namespace: fun
+spec:
+  ttlSecondsAfterFinished: 300
+  template:
+    spec:
+      restartPolicy: Never
+      containers:
+      - name: copy-whitelist
+        image: alpine
+        command: ["/bin/ash", "-c"]
+        args:
+        - "mkdir -p /factorio/config; cp /mnt/server-whitelist.json /factorio/config/server-whitelist.json"
+        volumeMounts:
+        - name: factorio-default-storage
+          mountPath: /factorio
+        - name: server-whitelist-volume
+          mountPath: /mnt/server-whitelist.json
+          subPath: server-whitelist.json
+      volumes:
+      - name: factorio-default-storage
+        persistentVolumeClaim:
+          claimName: factorio-default-pvc
+      - name: server-whitelist-volume
+        configMap:
+          name: factorio-whitelist
 

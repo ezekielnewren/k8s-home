@@ -16,26 +16,30 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: factorio-default
-        image: factoriotools/factorio:1.1.109
+        image: factoriotools/factorio:2.0.10
+        env:
+        - name: UPDATE_MODS_ON_START
+          value: "false"
+        - name: USERNAME
+          valueFrom:
+            configMapKeyRef:
+              name: factorio-username
+              key: USERNAME
+        - name: TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: factorio-token
+              key: TOKEN
         ports:
         - containerPort: 34197
           protocol: UDP
         volumeMounts:
         - name: factorio-default-storage
           mountPath: /factorio
-        #- name: whitelist
-        #  mountPath: /factorio/config/server-whitelist.json
-        #  subPath: server-whitelist.json
       volumes:
       - name: factorio-default-storage
         persistentVolumeClaim:
           claimName: factorio-default-pvc
-      - name: whitelist
-        configMap:
-          name: factorio-whitelist
-          items:
-          - key: server-whitelist.json
-            path: server-whitelist.json
 ---
 apiVersion: v1
 kind: Service
