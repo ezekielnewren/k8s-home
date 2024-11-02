@@ -38,7 +38,7 @@ spec:
           subPath: redis.conf.j2
       containers:
       - name: redis
-        image: redis:latest
+        image: redis:7.4.1
         imagePullPolicy: Always
         ports:
         - containerPort: 6379
