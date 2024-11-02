@@ -46,8 +46,7 @@ spec:
         - name: redis-config-volume
           mountPath: /config
         args:
-        - "redis-server"
-        - "/config/redis.conf"
+          - "/config/redis.conf"
       volumes:
       - name: redis-config-volume
         emptyDir: {}
