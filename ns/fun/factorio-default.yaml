@@ -16,7 +16,7 @@ spec:
       dnsPolicy: ClusterFirstWithHostNet
       containers:
       - name: factorio-default
-        image: factoriotools/factorio:2.0.12
+        image: factoriotools/factorio:2.0.13
         env:
         - name: UPDATE_MODS_ON_START
           value: "false"
