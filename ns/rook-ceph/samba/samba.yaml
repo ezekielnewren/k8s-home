@@ -50,11 +50,8 @@ spec:
           successThreshold: 1
           failureThreshold: 3
         livenessProbe:
-          exec:
-            command:
-              - /bin/bash
-              - -c
-              - "/opt/liveness.sh"
+          tcpSocket:
+            port: 4445
           initialDelaySeconds: 10
           periodSeconds: 20
           timeoutSeconds: 5
