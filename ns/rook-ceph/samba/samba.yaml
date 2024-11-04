@@ -45,7 +45,7 @@ spec:
               - -c
               - "/opt/readiness.sh"
           initialDelaySeconds: 5
-          periodSeconds: 10
+          periodSeconds: 60
           timeoutSeconds: 3
           successThreshold: 1
           failureThreshold: 3
