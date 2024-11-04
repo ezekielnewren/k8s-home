@@ -16,7 +16,7 @@ spec:
       containers:
       - name: samba
         image: docker.ezekielnewren.com/ceph_to_samba
-#        imagePullPolicy: Always
+        imagePullPolicy: Always
         securityContext:
           privileged: true
           capabilities:
@@ -38,6 +38,28 @@ spec:
         volumeMounts:
         - name: dev-fuse
           mountPath: /dev/fuse
+        readinessProbe:
+          exec:
+            command:
+              - /bin/bash
+              - -c
+              - "/opt/readiness.sh"
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          timeoutSeconds: 3
+          successThreshold: 1
+          failureThreshold: 3
+        livenessProbe:
+          exec:
+            command:
+              - /bin/bash
+              - -c
+              - "/opt/liveness.sh"
+          initialDelaySeconds: 10
+          periodSeconds: 20
+          timeoutSeconds: 5
+          successThreshold: 1
+          failureThreshold: 3
       volumes:
       - name: dev-fuse
         hostPath:
