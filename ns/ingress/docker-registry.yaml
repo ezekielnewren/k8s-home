@@ -56,4 +56,8 @@ spec:
             name: docker-registry
             port:
               number: 5000
+  tls:
+  - hosts:
+    - docker.ezekielnewren.com
+    secretName: docker-tls
 
