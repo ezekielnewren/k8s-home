@@ -11,7 +11,7 @@ COPY copy/smb.conf /etc/samba/smb.conf
 COPY copy/ceph.conf /etc/ceph/ceph.conf
 COPY copy/fuse.conf /etc/fuse.conf
 COPY copy/supervisord.conf /etc/supervisord.conf
-COPY copy/readiness.sh /opt/readiness.sh
+COPY copy/check_shares.sh /opt/check_shares.sh
 
 RUN mkdir -p /mnt/media /mnt/transfer
 RUN chmod 700 /mnt/media /mnt/transfer
