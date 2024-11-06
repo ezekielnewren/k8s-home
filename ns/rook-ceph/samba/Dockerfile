@@ -5,7 +5,7 @@ RUN dnf install -y epel-release
 RUN dnf install -y dumb-init supervisor ceph-common ceph-fuse samba samba-client tdb-tools
 
 ## nice to have
-RUN dnf install -y procps-ng nano file which iputils iproute nmap lsof
+RUN dnf install -y procps-ng nano file which iputils iproute nmap lsof rsync tmux
 
 COPY copy/smb.conf /etc/samba/smb.conf
 COPY copy/ceph.conf /etc/ceph/ceph.conf
