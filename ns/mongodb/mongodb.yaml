@@ -5,6 +5,8 @@ metadata:
   namespace: mongodb
 spec:
   replicas: 3
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: mongodb
